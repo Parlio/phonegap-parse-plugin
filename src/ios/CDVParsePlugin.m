@@ -68,6 +68,10 @@
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     NSString *channel = [command.arguments objectAtIndex:0];
     [currentInstallation addUniqueObject:channel forKey:@"channels"];
+    if([PFUser currentUser].isAuthenticated)
+    {
+        currentInstallation[@"user"] = [PFUser currentUser];
+    }
     [currentInstallation saveInBackground];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
