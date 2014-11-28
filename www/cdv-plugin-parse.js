@@ -39,13 +39,13 @@ var parsePlugin = {
         );
     },
 
-    subscribe: function(channel, successCallback, errorCallback) {
+    subscribe: function(channel, sessionToken, successCallback, errorCallback) {
         cordova.exec(
             successCallback,
             errorCallback,
             'ParsePlugin',
             'subscribe',
-            [ channel ]
+            [ channel, sessionToken ]
         );
     },
 
