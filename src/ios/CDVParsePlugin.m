@@ -64,17 +64,27 @@
             UIRemoteNotificationTypeSound];
     }
 
-    CDVPluginResult* pluginResult = nil;
-    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     NSString *channel = [command.arguments objectAtIndex:0];
+    NSString *sessionToken = [command.arguments objectAtIndex:1];
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation addUniqueObject:channel forKey:@"channels"];
-    if([PFUser currentUser].isAuthenticated)
-    {
-        currentInstallation[@"user"] = [PFUser currentUser];
+    
+    if(sessionToken) {
+        [PFUser becomeInBackground:sessionToken block:^(PFUser *user, NSError *error) {
+            if(!error) {
+                currentInstallation[@"user"] = user;
+            }
+            
+            [currentInstallation saveInBackground];
+        }];
     }
-    [currentInstallation saveInBackground];
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    else {
+        [currentInstallation saveInBackground];
+    }
+    
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
 }
 
 - (void)unsubscribe: (CDVInvokedUrlCommand *)command
