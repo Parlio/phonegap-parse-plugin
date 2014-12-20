@@ -7,8 +7,11 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseUser;
 import com.parse.PushService;
 
 public class ParsePlugin extends CordovaPlugin {
@@ -39,7 +42,7 @@ public class ParsePlugin extends CordovaPlugin {
             return true;
         }
         if (action.equals(ACTION_SUBSCRIBE)) {
-            this.subscribe(args.getString(0), callbackContext);
+            this.subscribe(args.getString(0), args.getString(1), callbackContext);
             return true;
         }
         if (action.equals(ACTION_UNSUBSCRIBE)) {
@@ -94,10 +97,23 @@ public class ParsePlugin extends CordovaPlugin {
         });
     }
 
-    private void subscribe(final String channel, final CallbackContext callbackContext) {
+    private void subscribe(final String channel, final String sessionToken, final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 PushService.subscribe(cordova.getActivity(), channel, cordova.getActivity().getClass());
+                if (sessionToken != null) {
+                    ParseUser.becomeInBackground("session-token-here", new LogInCallback() {
+                          public void done(ParseUser user, ParseException e) {
+                            if (user != null) {
+                              ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
+                              currentInstallation.put("user", user);
+                              currentInstallation.saveInBackground();
+                            } else {
+                              // The token could not be validated.
+                            }
+                          }
+                        });
+                }
                 callbackContext.success();
             }
         });
