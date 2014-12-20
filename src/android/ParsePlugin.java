@@ -102,7 +102,7 @@ public class ParsePlugin extends CordovaPlugin {
             public void run() {
                 PushService.subscribe(cordova.getActivity(), channel, cordova.getActivity().getClass());
                 if (sessionToken != null) {
-                    ParseUser.becomeInBackground("session-token-here", new LogInCallback() {
+                    ParseUser.becomeInBackground(sessionToken, new LogInCallback() {
                           public void done(ParseUser user, ParseException e) {
                             if (user != null) {
                               ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
