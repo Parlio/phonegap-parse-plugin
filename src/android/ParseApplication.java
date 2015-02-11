@@ -24,7 +24,7 @@ public class ParseApplication extends Application
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.initialize(this, "YNgix1K8f1vkGBUxqgkhzU7AlotSX0Rc01pQmfvy", "wSS5xNditxV9fTng7kLUmchKrTLkMgnjb7vUThyH");
+        Parse.initialize(this, "PARSE_APP_ID", "PARSE_CLIENT_KEY");
         PushService.setDefaultPushCallback(this, CordovaApp.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
