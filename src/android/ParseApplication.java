@@ -3,11 +3,12 @@ package org.apache.cordova.core;
 import android.app.Application;
 import android.content.Context;
 
+import com.parlio.enterprise.MainActivity;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.PushService;
 
-import com.parlio.enterprise.CordovaApp;
+
 
 public class ParseApplication extends Application 
 {
@@ -25,7 +26,7 @@ public class ParseApplication extends Application
     public void onCreate() {
         super.onCreate();
         Parse.initialize(this, PARSE_APP_ID, PARSE_CLIENT_KEY);
-        PushService.setDefaultPushCallback(this, CordovaApp.class);
+        PushService.setDefaultPushCallback(this, MainActivity.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 }
