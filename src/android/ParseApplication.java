@@ -3,7 +3,7 @@ package org.apache.cordova.core;
 import android.app.Application;
 import android.content.Context;
 
-import com.parlio.enterprise.MainActivity;
+import com.parlio.MainActivity;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.PushService;
